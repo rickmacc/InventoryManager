@@ -11,14 +11,13 @@
         <activity android:name=".ProductsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".EditorActivity"
             android:label="@string/editor_activity_title_new_item"
-            android:theme="@style/EditorTheme"
+            android:theme="@style/AppTheme"
             android:parentActivityName=".ProductsActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
