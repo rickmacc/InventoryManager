@@ -9,9 +9,13 @@
 
     <string name="item_name">Item Name</string>
 
+    <string name="name_missing_message">Inventory items must have a name.</string>
+
     <string name="item_price">Price</string>
 
     <string name="item_qty">Quantity</string>
+
+    <string name="item_qty_on_order">Quantity On Order</string>
 
     <string name="delete_dialog_msg">Delete this inventory item?</string>
 
@@ -29,20 +33,42 @@
 
     <string name="keep_editing">Keep Editing</string>
 
-    <string name="sell_item">Sell an Item</string>
+    <string name="sell_item">Sell Item</string>
 
     <string name="sell">Sell</string>
 
     <string name="sell_qty_message">You must enter a quantity to sell.</string>
 
+    <string name="sell_error_message">Error selling item.</string>
+
     <string name="sell_qty_too_high_message">You cannot sell more inventory than the current quantity.</string>
 
-    <string name="receive_item">Receive an Item</string>
+    <string name="receive_item">Receive Item</string>
 
     <string name="receive">Receive</string>
 
     <string name="receive_qty_message">You must enter a quantity to receive.</string>
 
     <string name="receive_error_message">Error receiving item.</string>
+
+    <string name="save_error_message">Error saving item.</string>
+
+    <string name="save_success_message">Inventory Item saved with row id: </string>
+
+    <string name="update_error_message">Error updating item.</string>
+
+    <string name="update_success_message">Inventory Item updated.</string>
+
+    <string name="delete_error_message">Error deleting item.</string>
+
+    <string name="delete_success_message">Inventory Item deleted</string>
+
+    <string name="order_item">Order Item</string>
+
+    <string name="order">Order</string>
+
+    <string name="order_qty_message">You must enter a quantity to order.</string>
+
+    <string name="order_error_message">Error ordering item.</string>
 
 </resources>

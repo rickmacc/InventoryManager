@@ -19,20 +19,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryItemEntry;
 
-import org.eightfoldpath.inventorymanager.R;
-
-import static android.R.attr.name;
-import static org.eightfoldpath.inventorymanager.data.InventoryItemContract.BASE_CONTENT_URI;
-import static org.eightfoldpath.inventorymanager.data.InventoryItemContract.PATH_INVENTORY_ITEMS;
+import static android.R.attr.id;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -47,7 +41,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText nameEditText;
     private EditText priceEditText;
     private EditText qtyEditText;
+    private EditText qtyOnOrderText;
     private EditText qtySellText;
+    private EditText qtyOrderText;
     private EditText qtyReceiveText;
 
     private Uri currentInventoryItemUri = null;
@@ -84,16 +80,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         qtyEditText = (EditText) findViewById(R.id.edit_item_qty);
         qtyEditText.setOnTouchListener(touchListener);
 
+        qtyOnOrderText = (EditText) findViewById(R.id.on_order_item_qty);
         qtySellText = (EditText) findViewById(R.id.sell_item_qty);
+        qtyOrderText = (EditText) findViewById(R.id.order_item_qty);
         qtyReceiveText = (EditText) findViewById(R.id.receive_item_qty);
 
         if (currentInventoryItemUri == null) {
             // This is a new item, so change the app bar to say "Add a InventoryItem"
             setTitle(getString(R.string.editor_activity_title_new_item));
 
-            // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a item that hasn't been created yet.)
-            invalidateOptionsMenu();
+            hideUpdateViews();
         } else {
             Button deleteButton = (Button) findViewById(R.id.button_delete);
             deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +107,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
             });
 
+            Button orderButton = (Button) findViewById(R.id.button_order);
+            orderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    orderInventoryItem();
+                }
+            });
+
             Button receiveButton = (Button) findViewById(R.id.button_receive);
             receiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,16 +128,45 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         cursorAdapter = new InventoryItemCursorAdapter(this, null);
     }
 
+    private void hideUpdateViews() {
+
+        qtyOnOrderText.setVisibility(View.INVISIBLE);
+
+        View dividerSell = (View) findViewById(R.id.divider_sell);
+        dividerSell.setVisibility(View.INVISIBLE);
+        LinearLayout sellItemLayout = (LinearLayout) findViewById(R.id.sell_item_layout);
+        sellItemLayout.setVisibility(View.INVISIBLE);
+        Button sellButton = (Button) findViewById(R.id.button_sell);
+        sellButton.setVisibility(View.INVISIBLE);
+
+        View dividerOrder = (View) findViewById(R.id.divider_order);
+        dividerOrder.setVisibility(View.INVISIBLE);
+        LinearLayout orderItemLayout = (LinearLayout) findViewById(R.id.order_item_layout);
+        orderItemLayout.setVisibility(View.INVISIBLE);
+        Button orderButton = (Button) findViewById(R.id.button_order);
+        orderButton.setVisibility(View.INVISIBLE);
+
+        View dividerReceive = (View) findViewById(R.id.divider_receive);
+        dividerReceive.setVisibility(View.INVISIBLE);
+        LinearLayout receiveItemLayout = (LinearLayout) findViewById(R.id.receive_item_layout);
+        receiveItemLayout.setVisibility(View.INVISIBLE);
+        Button receiveButton = (Button) findViewById(R.id.button_receive);
+        receiveButton.setVisibility(View.INVISIBLE);
+
+        View dividerDelete = (View) findViewById(R.id.divider_delete);
+        dividerDelete.setVisibility(View.INVISIBLE);
+        Button deleteButton = (Button) findViewById(R.id.button_delete);
+        deleteButton.setVisibility(View.INVISIBLE);
+    }
+
     private void saveInventoryItem() {
 
-        // Read from input fields
-        // Use trim to eliminate leading or trailing white space
         String nameString = nameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
         String qtyString = qtyEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(nameString)) {
-            Toast.makeText(this, "InventoryItems must have a name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.name_missing_message, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -155,19 +188,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (currentInventoryItemUri == null) {
             Uri newRow = getContentResolver().insert(InventoryItemEntry.CONTENT_URI, values);
             if (newRow == null) {
-                Toast.makeText(this, "Error saving item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.save_error_message), Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast with the row ID.
                 long newRowId = ContentUris.parseId(newRow);
-                Toast.makeText(this, "InventoryItem saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.save_success_message) + newRowId, Toast.LENGTH_SHORT).show();
             }
         } else {
             int rowsUpdated = getContentResolver().update(currentInventoryItemUri, values, null, null);
             if (rowsUpdated == 0) {
-                Toast.makeText(this, "Error updating item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.update_error_message), Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast with the row ID.
-                Toast.makeText(this, "InventoryItem updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.update_success_message), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -182,19 +215,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         int sellQuantity = 0;
 
         if (TextUtils.isEmpty(qtySellString)) {
-            Toast.makeText(this, R.string.sell_qty_message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.sell_qty_message), Toast.LENGTH_SHORT).show();
             return;
         } else {
             sellQuantity = Integer.parseInt(qtySellString);
             if (sellQuantity <= 0) {
-                Toast.makeText(this, R.string.sell_qty_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.sell_qty_message), Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
         int newQuantity = currentQuantity - sellQuantity;
         if (newQuantity < 0) {
-            Toast.makeText(this, R.string.sell_qty_too_high_message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.sell_qty_too_high_message), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -205,11 +238,45 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         int rowsUpdated = getContentResolver().update(currentInventoryItemUri, values, null, null);
         if (rowsUpdated == 0) {
-            Toast.makeText(this, "Error selling item", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.sell_error_message), Toast.LENGTH_SHORT).show();
         } else {
             qtySellText.setText("");
         }
     }
+
+    private void orderInventoryItem() {
+
+        String nameString = nameEditText.getText().toString().trim();
+        String currentQtyOnOrderString = qtyOnOrderText.getText().toString().trim();
+        int currentQtyOnOrder = Integer.parseInt(currentQtyOnOrderString);
+        String qtyOrderString = qtyOrderText.getText().toString().trim();
+        int orderQuantity = 0;
+
+        if (TextUtils.isEmpty(qtyOrderString)) {
+            Toast.makeText(this, getResources().getString(R.string.order_qty_message), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            orderQuantity = Integer.parseInt(qtyOrderString);
+            if (orderQuantity <= 0) {
+                Toast.makeText(this, getResources().getString(R.string.order_qty_message), Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        int newQuantity = currentQtyOnOrder + orderQuantity;
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
+        values.put(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER, newQuantity);
+
+        int rowsUpdated = getContentResolver().update(currentInventoryItemUri, values, null, null);
+        if (rowsUpdated == 0) {
+            Toast.makeText(this, getResources().getString(R.string.order_error_message), Toast.LENGTH_SHORT).show();
+        } else {
+            qtyOrderText.setText("");
+        }
+    }
+
 
     private void receiveInventoryItem() {
 
@@ -217,30 +284,35 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String priceString = priceEditText.getText().toString().trim();
         String qtyString = qtyEditText.getText().toString().trim();
         int currentQuantity = Integer.parseInt(qtyString);
+        String currentQtyOnOrderString = qtyOnOrderText.getText().toString().trim();
+        int currentQtyOnOrder = Integer.parseInt(currentQtyOnOrderString);
         String qtyReceiveString = qtyReceiveText.getText().toString().trim();
         int receiveQuantity = 0;
 
         if (TextUtils.isEmpty(qtyReceiveString)) {
-            Toast.makeText(this, R.string.receive_qty_message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.receive_qty_message), Toast.LENGTH_SHORT).show();
             return;
         } else {
             receiveQuantity = Integer.parseInt(qtyReceiveString);
             if (receiveQuantity <= 0) {
-                Toast.makeText(this, R.string.receive_qty_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.receive_qty_message), Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
         int newQuantity = currentQuantity + receiveQuantity;
+        int newQuantityOnOrder = currentQtyOnOrder - receiveQuantity;
+        if (newQuantityOnOrder <= 0) { newQuantityOnOrder = 0; }
 
         ContentValues values = new ContentValues();
         values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, priceString);
         values.put(InventoryItemEntry.COLUMN_ITEM_QTY, newQuantity);
+        values.put(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER, newQuantityOnOrder);
 
         int rowsUpdated = getContentResolver().update(currentInventoryItemUri, values, null, null);
         if (rowsUpdated == 0) {
-            Toast.makeText(this, R.string.receive_error_message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.receive_error_message), Toast.LENGTH_SHORT).show();
         } else {
             qtyReceiveText.setText("");
         }
@@ -279,10 +351,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (currentInventoryItemUri != null) {
             int rowsUpdated = getContentResolver().delete(currentInventoryItemUri, null, null);
             if (rowsUpdated == 0) {
-                Toast.makeText(this, "Error deleting item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.delete_error_message), Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the delete was successful and we can display a toast with the row ID.
-                Toast.makeText(this, "InventoryItem deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.delete_success_message), Toast.LENGTH_SHORT).show();
             }
             finish();
         }
@@ -347,7 +419,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 InventoryItemEntry._ID,
                 InventoryItemEntry.COLUMN_ITEM_NAME,
                 InventoryItemEntry.COLUMN_ITEM_PRICE,
-                InventoryItemEntry.COLUMN_ITEM_QTY
+                InventoryItemEntry.COLUMN_ITEM_QTY,
+                InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER
         };
 
         Log.d(LOG_TAG, "Creating loader with URI : " + currentInventoryItemUri.toString());
@@ -362,6 +435,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             nameEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_NAME)));
             priceEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_PRICE)));
             qtyEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY)));
+            qtyOnOrderText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER)));
         }
 
         cursorAdapter.swapCursor(data);

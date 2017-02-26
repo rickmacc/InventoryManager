@@ -201,16 +201,22 @@ public class InventoryItemProvider extends ContentProvider {
         } else {
             throw new IllegalArgumentException("InventoryItem requires a name");
         }
+        if (contentValues.containsKey(InventoryItemEntry.COLUMN_ITEM_PRICE)) {
+            Double price = contentValues.getAsDouble(InventoryItemEntry.COLUMN_ITEM_PRICE);
+            if (price.doubleValue() <= 0) {
+                throw new IllegalArgumentException("InventoryItem price must be greater than zero");
+            }
+        }
         if (contentValues.containsKey(InventoryItemEntry.COLUMN_ITEM_QTY)) {
             Integer quantity = contentValues.getAsInteger(InventoryItemEntry.COLUMN_ITEM_QTY);
             if (quantity.intValue() <= 0) {
                 throw new IllegalArgumentException("InventoryItem quantity must be greater than zero");
             }
         }
-        if (contentValues.containsKey(InventoryItemEntry.COLUMN_ITEM_PRICE)) {
-            Double price = contentValues.getAsDouble(InventoryItemEntry.COLUMN_ITEM_PRICE);
-            if (price.doubleValue() <= 0) {
-                throw new IllegalArgumentException("InventoryItem price must be greater than zero");
+        if (contentValues.containsKey(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER)) {
+            Integer quantity = contentValues.getAsInteger(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER);
+            if (quantity.intValue() <= 0) {
+                throw new IllegalArgumentException("InventoryItem quantity on order must be greater than zero");
             }
         }
     }

@@ -42,15 +42,23 @@
                 android:hint="@string/item_qty"
                 android:inputType="textCapWords" />
 
+            <EditText
+                android:id="@+id/on_order_item_qty"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/item_qty_on_order"
+                android:inputType="textCapWords" />
+
         </LinearLayout>
     </LinearLayout>
 
     <View
+        android:id="@+id/divider_sell"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/sell_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -83,11 +91,53 @@
         android:text="@string/sell" />
 
     <View
+        android:id="@+id/divider_order"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/order_item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/order_item" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
+
+            <EditText
+                android:id="@+id/order_item_qty"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/item_qty"
+                android:inputType="textCapWords" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/order" />
+
+
+    <View
+        android:id="@+id/divider_receive"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:id="@+id/receive_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -120,6 +170,7 @@
         android:text="@string/receive" />
 
     <View
+        android:id="@+id/divider_delete"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="?android:attr/listDivider" />

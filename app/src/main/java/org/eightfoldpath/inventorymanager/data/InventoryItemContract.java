@@ -40,6 +40,8 @@ public final class InventoryItemContract {
 
         public final static String COLUMN_ITEM_PRICE = "price";
 
+        public final static String COLUMN_ITEM_QTY_ON_ORDER = "quantity_on_order";
+
     }
 
 }

@@ -64,8 +64,8 @@ public class ProductsActivity extends AppCompatActivity implements LoaderManager
         String[] projection = {
                 InventoryItemEntry._ID,
                 InventoryItemEntry.COLUMN_ITEM_NAME,
-                InventoryItemEntry.COLUMN_ITEM_QTY,
-                InventoryItemEntry.COLUMN_ITEM_PRICE
+                InventoryItemEntry.COLUMN_ITEM_PRICE,
+                InventoryItemEntry.COLUMN_ITEM_QTY
         };
 
         return new CursorLoader(this, InventoryItemEntry.CONTENT_URI, projection, null, null, null);
