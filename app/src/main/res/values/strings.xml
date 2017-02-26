@@ -37,4 +37,12 @@
 
     <string name="sell_qty_too_high_message">You cannot sell more inventory than the current quantity.</string>
 
+    <string name="receive_item">Receive an Item</string>
+
+    <string name="receive">Receive</string>
+
+    <string name="receive_qty_message">You must enter a quantity to receive.</string>
+
+    <string name="receive_error_message">Error receiving item.</string>
+
 </resources>

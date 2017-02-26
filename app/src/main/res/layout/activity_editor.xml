@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,33 +14,33 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="@string/category_overview"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/category_overview" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:paddingLeft="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
 
             <EditText
                 android:id="@+id/edit_item_name"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/item_name"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
             <EditText
                 android:id="@+id/edit_item_price"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/item_price"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
             <EditText
                 android:id="@+id/edit_item_qty"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/item_qty"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
         </LinearLayout>
     </LinearLayout>
@@ -49,7 +48,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="?android:attr/listDivider"/>
+        android:background="?android:attr/listDivider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,43 +56,78 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="@string/sell_item"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/sell_item" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:paddingLeft="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
 
             <EditText
                 android:id="@+id/sell_item_qty"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/item_qty"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-        <Button
-            android:id="@+id/button_sell"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sell"
-            />
+    <Button
+        android:id="@+id/button_sell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sell" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="?android:attr/listDivider"/>
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/receive_item" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
+
+            <EditText
+                android:id="@+id/receive_item_qty"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/item_qty"
+                android:inputType="textCapWords" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_receive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/receive" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider" />
 
     <Button
         android:id="@+id/button_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/action_delete"
-        />
+        android:text="@string/action_delete" />
 
 </LinearLayout>

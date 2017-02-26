@@ -48,6 +48,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText priceEditText;
     private EditText qtyEditText;
     private EditText qtySellText;
+    private EditText qtyReceiveText;
 
     private Uri currentInventoryItemUri = null;
 
@@ -84,6 +85,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         qtyEditText.setOnTouchListener(touchListener);
 
         qtySellText = (EditText) findViewById(R.id.sell_item_qty);
+        qtyReceiveText = (EditText) findViewById(R.id.receive_item_qty);
 
         if (currentInventoryItemUri == null) {
             // This is a new item, so change the app bar to say "Add a InventoryItem"
@@ -106,6 +108,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 @Override
                 public void onClick(View view) {
                     sellInventoryItem();
+                }
+            });
+
+            Button receiveButton = (Button) findViewById(R.id.button_receive);
+            receiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    receiveInventoryItem();
                 }
             });
 
@@ -201,6 +211,40 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
+    private void receiveInventoryItem() {
+
+        String nameString = nameEditText.getText().toString().trim();
+        String priceString = priceEditText.getText().toString().trim();
+        String qtyString = qtyEditText.getText().toString().trim();
+        int currentQuantity = Integer.parseInt(qtyString);
+        String qtyReceiveString = qtyReceiveText.getText().toString().trim();
+        int receiveQuantity = 0;
+
+        if (TextUtils.isEmpty(qtyReceiveString)) {
+            Toast.makeText(this, R.string.receive_qty_message, Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            receiveQuantity = Integer.parseInt(qtyReceiveString);
+            if (receiveQuantity <= 0) {
+                Toast.makeText(this, R.string.receive_qty_message, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        int newQuantity = currentQuantity + receiveQuantity;
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
+        values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, priceString);
+        values.put(InventoryItemEntry.COLUMN_ITEM_QTY, newQuantity);
+
+        int rowsUpdated = getContentResolver().update(currentInventoryItemUri, values, null, null);
+        if (rowsUpdated == 0) {
+            Toast.makeText(this, R.string.receive_error_message, Toast.LENGTH_SHORT).show();
+        } else {
+            qtyReceiveText.setText("");
+        }
+    }
 
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
