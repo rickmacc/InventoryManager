@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Inventory Manager</string>
+
+    <string name="editor_activity_title_new_item">Add Inventory Item</string>
+
+    <string name="editor_activity_title_edit_item">Update Item</string>
+
+    <string name="category_overview">Overview</string>
+
+    <string name="item_name">Item Name</string>
+
+    <string name="item_price">Price</string>
+
+    <string name="item_qty">Quantity</string>
+
+    <string name="delete_dialog_msg">Delete this inventory item?</string>
+
+    <string name="action_save">Save</string>
+
+    <string name="action_delete">Delete</string>
+
+    <string name="delete">Delete</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <string name="discard">Discard</string>
+
+    <string name="keep_editing">Keep Editing</string>
+
 </resources>

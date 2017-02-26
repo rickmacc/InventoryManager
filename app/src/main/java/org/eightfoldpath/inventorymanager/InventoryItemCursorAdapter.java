@@ -3,6 +3,7 @@ package org.eightfoldpath.inventorymanager;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryIt
 import java.text.NumberFormat;
 
 public class InventoryItemCursorAdapter extends CursorAdapter {
+
+    private static final String LOG_TAG = InventoryItemCursorAdapter.class.getSimpleName();
 
     /**
      * Constructs a new {@link InventoryItemCursorAdapter}.
@@ -57,12 +60,15 @@ public class InventoryItemCursorAdapter extends CursorAdapter {
         TextView viewPrice = (TextView) view.findViewById(R.id.product_price);
 
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryItemEntry.COLUMN_ITEM_NAME));
+        Log.d(LOG_TAG, "Binding view name with value :" + name);
         viewName.setText(name);
 
         int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryItemEntry.COLUMN_ITEM_QTY));
-        viewQty.setText(quantity);
+        Log.d(LOG_TAG, "Binding view quantity with value :" + quantity);
+        viewQty.setText(Integer.toString(quantity));
 
         double price = cursor.getDouble(cursor.getColumnIndexOrThrow(InventoryItemEntry.COLUMN_ITEM_PRICE));
+        Log.d(LOG_TAG, "Binding view price with value :" + price);
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
         viewPrice.setText(currencyFormatter.format(price));
     }

@@ -15,9 +15,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EditorActivity"
+            android:label="@string/editor_activity_title_new_item"
+            android:theme="@style/EditorTheme"
+            android:parentActivityName=".ProductsActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProductsActivity" />
+        </activity>
         <provider
             android:name=".data.InventoryItemProvider"
-            android:authorities="org.eightfoldpath.inventorymanager.data"
+            android:authorities="org.eightfoldpath.inventorymanager"
             android:exported="false" />
     </application>
 

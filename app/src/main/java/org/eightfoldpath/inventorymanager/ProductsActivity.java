@@ -2,11 +2,14 @@ package org.eightfoldpath.inventorymanager;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.support.design.widget.FloatingActionButton;
 
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract;
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryItemEntry;
@@ -21,6 +24,16 @@ public class ProductsActivity extends AppCompatActivity implements LoaderManager
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
+        // Setup FAB to open EditorActivity
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_inventory_item_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductsActivity.this, org.eightfoldpath.inventorymanager.EditorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ListView listView = (ListView) findViewById(R.id.inventory_items);
         cursorAdapter = new InventoryItemCursorAdapter(this, null);
