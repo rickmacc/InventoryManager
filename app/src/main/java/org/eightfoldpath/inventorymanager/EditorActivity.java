@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -88,6 +89,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a item that hasn't been created yet.)
             invalidateOptionsMenu();
+        } else {
+            Button deleteButton = (Button) findViewById(R.id.button_delete);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDeleteConfirmationDialog();
+                }
+            });
+
         }
 
         cursorAdapter = new InventoryItemCursorAdapter(this, null);
@@ -213,10 +223,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 saveInventoryItem();
                 // Exit activity
                 finish();
-                return true;
-            // Respond to a click on the "Delete" menu option
-            case R.id.action_delete:
-                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
