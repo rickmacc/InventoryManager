@@ -11,6 +11,7 @@
     tools:context="org.eightfoldpath.inventorymanager.ProductsActivity">
 
     <ListView
+        android:id="@+id/inventory_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
