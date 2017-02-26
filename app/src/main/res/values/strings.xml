@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Inventory Manager</string>
 
+    <string name="empty_inventory_list">There are no items in inventory.</string>
+
     <string name="editor_activity_title_new_item">Add Inventory Item</string>
 
     <string name="editor_activity_title_edit_item">Update Item</string>

@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
 
-import org.eightfoldpath.inventorymanager.data.InventoryItemContract;
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryItemEntry;
 
 public class ProductsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -51,6 +50,9 @@ public class ProductsActivity extends AppCompatActivity implements LoaderManager
                 startActivity(intent);
             }
         });
+
+        View emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
 
         cursorAdapter = new InventoryItemCursorAdapter(this, null);
         listView.setAdapter(cursorAdapter);
