@@ -29,4 +29,12 @@
 
     <string name="keep_editing">Keep Editing</string>
 
+    <string name="sell_item">Sell an Item</string>
+
+    <string name="sell">Sell</string>
+
+    <string name="sell_qty_message">You must enter a quantity to sell.</string>
+
+    <string name="sell_qty_too_high_message">You cannot sell more inventory than the current quantity.</string>
+
 </resources>

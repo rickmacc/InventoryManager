@@ -47,6 +47,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText nameEditText;
     private EditText priceEditText;
     private EditText qtyEditText;
+    private EditText qtySellText;
 
     private Uri currentInventoryItemUri = null;
 
@@ -82,6 +83,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         qtyEditText = (EditText) findViewById(R.id.edit_item_qty);
         qtyEditText.setOnTouchListener(touchListener);
 
+        qtySellText = (EditText) findViewById(R.id.sell_item_qty);
+
         if (currentInventoryItemUri == null) {
             // This is a new item, so change the app bar to say "Add a InventoryItem"
             setTitle(getString(R.string.editor_activity_title_new_item));
@@ -95,6 +98,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 @Override
                 public void onClick(View view) {
                     showDeleteConfirmationDialog();
+                }
+            });
+
+            Button sellButton = (Button) findViewById(R.id.button_sell);
+            sellButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sellInventoryItem();
                 }
             });
 
@@ -151,6 +162,46 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
+    private void sellInventoryItem() {
+
+        String nameString = nameEditText.getText().toString().trim();
+        String priceString = priceEditText.getText().toString().trim();
+        String qtyString = qtyEditText.getText().toString().trim();
+        int currentQuantity = Integer.parseInt(qtyString);
+        String qtySellString = qtySellText.getText().toString().trim();
+        int sellQuantity = 0;
+
+        if (TextUtils.isEmpty(qtySellString)) {
+            Toast.makeText(this, R.string.sell_qty_message, Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            sellQuantity = Integer.parseInt(qtySellString);
+            if (sellQuantity <= 0) {
+                Toast.makeText(this, R.string.sell_qty_message, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        int newQuantity = currentQuantity - sellQuantity;
+        if (newQuantity < 0) {
+            Toast.makeText(this, R.string.sell_qty_too_high_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
+        values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, priceString);
+        values.put(InventoryItemEntry.COLUMN_ITEM_QTY, newQuantity);
+
+        int rowsUpdated = getContentResolver().update(currentInventoryItemUri, values, null, null);
+        if (rowsUpdated == 0) {
+            Toast.makeText(this, "Error selling item", Toast.LENGTH_SHORT).show();
+        } else {
+            qtySellText.setText("");
+        }
+    }
+
+
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positive and negative buttons on the dialog.
@@ -204,12 +255,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new item, hide the "Delete" menu item.
-        //if (mCurrentInventoryItemUri == null) {
-        if (currentInventoryItemUri == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_delete);
-            menuItem.setVisible(false);
-        }
         return true;
     }
 
