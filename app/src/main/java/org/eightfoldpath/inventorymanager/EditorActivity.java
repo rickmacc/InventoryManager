@@ -117,7 +117,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         ContentValues values = new ContentValues();
-        values.put(InventoryItemEntry.COLUMN_ITEM_NAME, name);
+        values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, price);
         values.put(InventoryItemEntry.COLUMN_ITEM_QTY, quantity);
 
