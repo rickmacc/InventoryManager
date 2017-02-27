@@ -11,36 +11,70 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/CategoryStyle"
-            android:text="@string/category_overview" />
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:paddingLeft="4dp">
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/item_name" />
 
             <EditText
                 android:id="@+id/edit_item_name"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/item_name"
                 android:inputType="textCapWords" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp">
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/item_price" />
 
             <EditText
                 android:id="@+id/edit_item_price"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/item_price"
                 android:inputType="textCapWords" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp">
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/item_qty" />
 
             <EditText
                 android:id="@+id/edit_item_qty"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/item_qty"
                 android:inputType="textCapWords" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/on_order_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp">
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/item_qty_on_order" />
 
             <EditText
                 android:id="@+id/on_order_item_qty"
@@ -49,6 +83,7 @@
                 android:inputType="textCapWords" />
 
         </LinearLayout>
+
     </LinearLayout>
 
     <View
@@ -76,7 +111,7 @@
 
             <EditText
                 android:id="@+id/sell_item_qty"
-                style="@style/EditorFieldStyle"
+                style="@style/QuantityFieldStyle"
                 android:hint="@string/item_qty"
                 android:inputType="textCapWords" />
 
@@ -115,7 +150,7 @@
 
             <EditText
                 android:id="@+id/order_item_qty"
-                style="@style/EditorFieldStyle"
+                style="@style/QuantityFieldStyle"
                 android:hint="@string/item_qty"
                 android:inputType="textCapWords" />
 
@@ -155,7 +190,7 @@
 
             <EditText
                 android:id="@+id/receive_item_qty"
-                style="@style/EditorFieldStyle"
+                style="@style/QuantityFieldStyle"
                 android:hint="@string/item_qty"
                 android:inputType="textCapWords" />
 

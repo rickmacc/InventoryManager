@@ -112,7 +112,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private void hideUpdateViews() {
 
-        qtyOnOrderText.setVisibility(View.INVISIBLE);
+
+        LinearLayout onOrderItemLayout = (LinearLayout) findViewById(R.id.on_order_item);
+        onOrderItemLayout.setVisibility(View.INVISIBLE);
 
         View dividerSell = (View) findViewById(R.id.divider_sell);
         dividerSell.setVisibility(View.INVISIBLE);
