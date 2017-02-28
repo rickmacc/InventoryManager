@@ -1,18 +1,27 @@
 package org.eightfoldpath.inventorymanager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryItemEntry;
 
 import java.text.NumberFormat;
+
+import static android.R.attr.name;
 
 public class InventoryItemCursorAdapter extends CursorAdapter {
 
@@ -71,5 +80,49 @@ public class InventoryItemCursorAdapter extends CursorAdapter {
         Log.d(LOG_TAG, "Binding view price with value :" + price);
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
         viewPrice.setText(currencyFormatter.format(price));
+
+        int itemId = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryItemEntry._ID));
+        if (quantity > 0) {
+            ((Button) view.findViewById(R.id.button_sell)).setOnClickListener(
+                    new sellButtonClickListener(context, itemId, name, quantity, price));
+        } else {
+            ((Button) view.findViewById(R.id.button_sell)).setEnabled(false);
+        }
+
     }
+
+    public class sellButtonClickListener implements View.OnClickListener{
+
+        private Context context;
+        private int itemId;
+        String itemName;
+        int itemQuantity;
+        double itemPrice;
+
+        public sellButtonClickListener(Context context, int itemId, String itemName, int itemQuantity, double itemPrice){
+            this.context = context;
+            this.itemId=itemId;
+            this.itemName = itemName;
+            this.itemQuantity = itemQuantity;
+            this.itemPrice = itemPrice;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(LOG_TAG, "Button clicked with inventory item :" + itemId);
+
+            int newQuantity = itemQuantity - 1;
+            if (newQuantity < 0) { newQuantity = 0; }
+
+            ContentValues values = new ContentValues();
+            values.put(InventoryItemEntry.COLUMN_ITEM_NAME, itemName);
+            values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, Double.toString(itemPrice));
+            values.put(InventoryItemEntry.COLUMN_ITEM_QTY, newQuantity);
+
+            Uri currentInventoryItemUri = Uri.withAppendedPath(InventoryItemEntry.CONTENT_URI, Integer.toString(itemId));
+            int rowsUpdated = context.getContentResolver().update(currentInventoryItemUri, values, null, null);
+        }
+
+    }
+
 }
