@@ -152,8 +152,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String qtyString = qtyEditText.getText().toString().trim();
         String imageString = imageEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(nameString)) {
-            Toast.makeText(this, R.string.name_missing_message, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) || TextUtils.isEmpty(qtyString) || TextUtils.isEmpty(imageString)) {
+            Toast.makeText(this, R.string.complete_all_entries_message, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -191,6 +191,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getResources().getString(R.string.update_success_message), Toast.LENGTH_SHORT).show();
             }
         }
+
+        finish();
     }
 
     private void sellInventoryItem() {
@@ -374,8 +376,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case R.id.action_save:
                 // Save item to database
                 saveInventoryItem();
-                // Exit activity
-                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
