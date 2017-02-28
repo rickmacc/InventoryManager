@@ -34,6 +34,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText nameEditText;
     private EditText priceEditText;
     private EditText qtyEditText;
+    private EditText imageEditText;
     private EditText qtyOnOrderText;
     private EditText qtySellText;
     private EditText qtyOrderText;
@@ -61,6 +62,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         nameEditText = (EditText) findViewById(R.id.edit_item_name);
         priceEditText = (EditText) findViewById(R.id.edit_item_price);
         qtyEditText = (EditText) findViewById(R.id.edit_item_qty);
+        imageEditText = (EditText) findViewById(R.id.edit_item_image);
 
         qtyOnOrderText = (EditText) findViewById(R.id.on_order_item_qty);
         qtySellText = (EditText) findViewById(R.id.sell_item_qty);
@@ -148,6 +150,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String nameString = nameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
         String qtyString = qtyEditText.getText().toString().trim();
+        String imageString = imageEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(this, R.string.name_missing_message, Toast.LENGTH_SHORT).show();
@@ -168,6 +171,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, price);
         values.put(InventoryItemEntry.COLUMN_ITEM_QTY, quantity);
+        values.put(InventoryItemEntry.COLUMN_ITEM_IMAGE, imageString);
 
         if (currentInventoryItemUri == null) {
             Uri newRow = getContentResolver().insert(InventoryItemEntry.CONTENT_URI, values);
@@ -258,6 +262,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Toast.makeText(this, getResources().getString(R.string.order_error_message), Toast.LENGTH_SHORT).show();
         } else {
             qtyOrderText.setText("");
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getText(R.string.order_item));
+            intent.putExtra(Intent.EXTRA_TEXT, nameString + " - " + qtyOrderString);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+
+
         }
     }
 
@@ -375,6 +389,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 InventoryItemEntry.COLUMN_ITEM_NAME,
                 InventoryItemEntry.COLUMN_ITEM_PRICE,
                 InventoryItemEntry.COLUMN_ITEM_QTY,
+                InventoryItemEntry.COLUMN_ITEM_IMAGE,
                 InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER
         };
 
@@ -390,6 +405,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             nameEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_NAME)));
             priceEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_PRICE)));
             qtyEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY)));
+            imageEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_IMAGE)));
             qtyOnOrderText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER)));
         }
 
@@ -402,6 +418,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         nameEditText.setText("");
         priceEditText.setText("");
         qtyEditText.setText("");
+        imageEditText.setText("");
 
         cursorAdapter.swapCursor(null);
     }

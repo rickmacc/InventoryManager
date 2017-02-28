@@ -17,6 +17,8 @@
 
     <string name="item_qty">Quantity</string>
 
+    <string name="item_image">Image URL</string>
+
     <string name="item_qty_on_order">Quantity On Order</string>
 
     <string name="delete_dialog_msg">Delete this inventory item?</string>

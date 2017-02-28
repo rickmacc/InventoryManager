@@ -215,7 +215,7 @@ public class InventoryItemProvider extends ContentProvider {
         }
         if (contentValues.containsKey(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER)) {
             Integer quantity = contentValues.getAsInteger(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER);
-            if (quantity.intValue() <= 0) {
+            if (quantity.intValue() < 0) {
                 throw new IllegalArgumentException("InventoryItem quantity on order must be greater than zero");
             }
         }

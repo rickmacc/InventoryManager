@@ -66,6 +66,24 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp">
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/item_image" />
+
+            <EditText
+                android:id="@+id/edit_item_image"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/item_image"
+                android:inputType="textCapWords" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/on_order_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
