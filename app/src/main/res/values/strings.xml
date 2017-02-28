@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Inventory Manager</string>
 
-    <string name="empty_inventory_list">There are no items in inventory.</string>
+    <string name="empty_inventory_list">There are no items in inventory.\n Please click add button to get started.</string>
 
     <string name="editor_activity_title_new_item">Add Inventory Item</string>
 
@@ -10,6 +10,8 @@
     <string name="category_overview">Overview</string>
 
     <string name="item_name">Item Name</string>
+
+    <string name="complete_all_entries_message">You must fill in all attributes to create inventory.</string>
 
     <string name="name_missing_message">Inventory items must have a name.</string>
 
