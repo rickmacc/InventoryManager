@@ -120,7 +120,7 @@ public class InventoryItemCursorAdapter extends CursorAdapter {
             values.put(InventoryItemEntry.COLUMN_ITEM_QTY, newQuantity);
 
             Uri currentInventoryItemUri = Uri.withAppendedPath(InventoryItemEntry.CONTENT_URI, Integer.toString(itemId));
-            int rowsUpdated = context.getContentResolver().update(currentInventoryItemUri, values, null, null);
+            context.getContentResolver().update(currentInventoryItemUri, values, null, null);
         }
 
     }
