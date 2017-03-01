@@ -84,6 +84,12 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_margin="6dp"/>
+
         <LinearLayout
             android:id="@+id/on_order_item"
             android:layout_width="match_parent"

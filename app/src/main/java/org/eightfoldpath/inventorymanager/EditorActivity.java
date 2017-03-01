@@ -1,5 +1,6 @@
 package org.eightfoldpath.inventorymanager;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -8,9 +9,13 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,10 +24,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryItemEntry;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -66,8 +75,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         priceEditText = (EditText) findViewById(R.id.edit_item_price);
         qtyEditText = (EditText) findViewById(R.id.edit_item_qty);
 
-
-        //imageEditText = (EditText) findViewById(R.id.edit_item_image);
         Button selectItemImage = (Button) findViewById(R.id.select_item_image);
         selectItemImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +96,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             hideUpdateViews();
         } else {
+
+            int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    ImageView imageView = (ImageView) findViewById(R.id.item_image);
+                    //Uri imageUri = Uri.parse(itemImageUri);
+                    final InputStream imageStream = getContentResolver().openInputStream(itemImageUri);
+                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    imageView.setImageBitmap(selectedImage);
+                } catch (FileNotFoundException ex) {
+                    Log.d(LOG_TAG, ex.toString());
+                }
+            }
+
             Button deleteButton = (Button) findViewById(R.id.button_delete);
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
