@@ -75,11 +75,12 @@
                 style="@style/CategoryStyle"
                 android:text="@string/item_image" />
 
-            <EditText
-                android:id="@+id/edit_item_image"
-                style="@style/EditorFieldStyle"
+            <Button
+                android:id="@+id/select_item_image"
                 android:hint="@string/item_image"
-                android:inputType="textCapWords" />
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
 
         </LinearLayout>
 

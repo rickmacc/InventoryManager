@@ -1,24 +1,27 @@
 package org.eightfoldpath.inventorymanager;
 
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CursorAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryItemEntry;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.NumberFormat;
 
 import static android.R.attr.name;
@@ -80,6 +83,19 @@ public class InventoryItemCursorAdapter extends CursorAdapter {
         Log.d(LOG_TAG, "Binding view price with value :" + price);
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
         viewPrice.setText(currencyFormatter.format(price));
+
+        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            try {
+                ImageView imageView = (ImageView) view.findViewById(R.id.item_image);
+                Uri imageUri = Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(InventoryItemEntry.COLUMN_ITEM_IMAGE)));
+                final InputStream imageStream = context.getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException ex) {
+                Log.d(LOG_TAG, ex.toString());
+            }
+        }
 
         int itemId = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryItemEntry._ID));
         if (quantity > 0) {

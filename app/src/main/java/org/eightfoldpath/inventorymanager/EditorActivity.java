@@ -27,6 +27,7 @@ import org.eightfoldpath.inventorymanager.data.InventoryItemContract.InventoryIt
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int INVENTORY_ITEM_LOADER = 1;
+    private static final int SELECT_PHOTO = 1;
     private static final String LOG_TAG = EditorActivity.class.getSimpleName();
 
     InventoryItemCursorAdapter cursorAdapter;
@@ -39,6 +40,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText qtySellText;
     private EditText qtyOrderText;
     private EditText qtyReceiveText;
+
+    private Uri itemImageUri;
 
     private Uri currentInventoryItemUri = null;
 
@@ -62,7 +65,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         nameEditText = (EditText) findViewById(R.id.edit_item_name);
         priceEditText = (EditText) findViewById(R.id.edit_item_price);
         qtyEditText = (EditText) findViewById(R.id.edit_item_qty);
-        imageEditText = (EditText) findViewById(R.id.edit_item_image);
+
+
+        //imageEditText = (EditText) findViewById(R.id.edit_item_image);
+        Button selectItemImage = (Button) findViewById(R.id.select_item_image);
+        selectItemImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
 
         qtyOnOrderText = (EditText) findViewById(R.id.on_order_item_qty);
         qtySellText = (EditText) findViewById(R.id.sell_item_qty);
@@ -150,9 +164,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String nameString = nameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
         String qtyString = qtyEditText.getText().toString().trim();
-        String imageString = imageEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) || TextUtils.isEmpty(qtyString) || TextUtils.isEmpty(imageString)) {
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) || TextUtils.isEmpty(qtyString) || (itemImageUri == null) || TextUtils.isEmpty(itemImageUri.toString())) {
             Toast.makeText(this, R.string.complete_all_entries_message, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -171,7 +184,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryItemEntry.COLUMN_ITEM_PRICE, price);
         values.put(InventoryItemEntry.COLUMN_ITEM_QTY, quantity);
-        values.put(InventoryItemEntry.COLUMN_ITEM_IMAGE, imageString);
+        values.put(InventoryItemEntry.COLUMN_ITEM_IMAGE, itemImageUri.toString());
+        Log.d(LOG_TAG, "Saving item " + nameString + ", price: " + price + ", qty: " + quantity + ", image url: " + itemImageUri.toString());
 
         if (currentInventoryItemUri == null) {
             Uri newRow = getContentResolver().insert(InventoryItemEntry.CONTENT_URI, values);
@@ -277,7 +291,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
-
     private void receiveInventoryItem() {
 
         String nameString = nameEditText.getText().toString().trim();
@@ -382,6 +395,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    itemImageUri = imageReturnedIntent.getData();
+                }
+        }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         String[] projection = {
@@ -405,7 +430,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             nameEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_NAME)));
             priceEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_PRICE)));
             qtyEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY)));
-            imageEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_IMAGE)));
+            itemImageUri = Uri.parse(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_IMAGE)));
             qtyOnOrderText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER)));
         }
 
@@ -418,7 +443,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         nameEditText.setText("");
         priceEditText.setText("");
         qtyEditText.setText("");
-        imageEditText.setText("");
+        itemImageUri = null;
 
         cursorAdapter.swapCursor(null);
     }

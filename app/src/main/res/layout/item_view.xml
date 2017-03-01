@@ -3,6 +3,12 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="6dp"/>
+
     <TextView
         android:id="@+id/product_name"
         android:layout_weight="2"
