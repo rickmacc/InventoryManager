@@ -97,19 +97,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             hideUpdateViews();
         } else {
 
-            int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    ImageView imageView = (ImageView) findViewById(R.id.item_image);
-                    //Uri imageUri = Uri.parse(itemImageUri);
-                    final InputStream imageStream = getContentResolver().openInputStream(itemImageUri);
-                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    imageView.setImageBitmap(selectedImage);
-                } catch (FileNotFoundException ex) {
-                    Log.d(LOG_TAG, ex.toString());
-                }
-            }
-
             Button deleteButton = (Button) findViewById(R.id.button_delete);
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -423,6 +410,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
                     itemImageUri = imageReturnedIntent.getData();
+                    loadItemImage();
                 }
         }
     }
@@ -453,6 +441,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             qtyEditText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY)));
             itemImageUri = Uri.parse(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_IMAGE)));
             qtyOnOrderText.setText(data.getString(data.getColumnIndex(InventoryItemEntry.COLUMN_ITEM_QTY_ON_ORDER)));
+
+            loadItemImage();
         }
 
         cursorAdapter.swapCursor(data);
@@ -467,6 +457,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         itemImageUri = null;
 
         cursorAdapter.swapCursor(null);
+    }
+
+    private void loadItemImage() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            try {
+                ImageView imageView = (ImageView) findViewById(R.id.item_image);
+                final InputStream imageStream = getContentResolver().openInputStream(itemImageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException ex) {
+                Log.d(LOG_TAG, ex.toString());
+            }
+        }
     }
 
 }
